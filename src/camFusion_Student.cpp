@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <numeric>
+#include <cmath>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -153,8 +154,57 @@ void computeTTCCamera(std::vector<cv::KeyPoint> &kptsPrev, std::vector<cv::KeyPo
 void computeTTCLidar(std::vector<LidarPoint> &lidarPointsPrev,
                      std::vector<LidarPoint> &lidarPointsCurr, double frameRate, double &TTC)
 {
-    // ...
+
+    std::vector<double> prevPoints_x, currPoints_x;
+    for(auto & prevLidarPoint : lidarPointsPrev){
+
+        if( abs(prevLidarPoint.y)<= 2 ){
+            prevPoints_x.push_back(prevLidarPoint.x);
+        }
+    }
+
+    for(auto & currLidarPoint : lidarPointsCurr){
+
+        if( abs(currLidarPoint.y)<= 2 ){
+            currPoints_x.push_back(currLidarPoint.x);
+        }
+    }
+
+    if(currPoints_x.empty() || prevPoints_x.empty()){
+        TTC = NAN;
+        return;
+    }
+
+    std::sort(prevPoints_x.begin(), prevPoints_x.end(), [](const double &a, const double &b) {
+        return a < b;  // ascending x values
+    });
+
+    std::sort(currPoints_x.begin(), currPoints_x.end(), [](const double &a, const double &b) {
+        return a < b;  // ascending x values
+    });
+
+    double median_prev,median_curr;      // use median values which are more robust to outliers
+
+    if(prevPoints_x.size()%2 == 0){
+        median_prev = ( prevPoints_x[prevPoints_x.size()/2] + prevPoints_x[(prevPoints_x.size()/2) -1 ])/2 ;
+        //average of the 2 middle numbers if the vector has an even size
+    }else{
+        median_prev = prevPoints_x[prevPoints_x.size()/2];
+        //middle number if the vector has an odd size
+    }
+
+    if(currPoints_x.size()%2 == 0){
+        median_curr = (currPoints_x[currPoints_x.size()/2] + currPoints_x[(currPoints_x.size()/2) -1 ])/2 ;
+        //average of the 2 middle numbers if the vector has an even size
+    }else{
+        median_curr = currPoints_x[currPoints_x.size()/2];
+        //middle number if the vector has an odd size
+    }
+
+    TTC  = ( median_curr * (1/frameRate) )/(median_prev - median_curr) ;
+
 }
+
 
 
 void matchBoundingBoxes(std::vector<cv::DMatch> &matches, std::map<int, int> &bbBestMatches, DataFrame &prevFrame, DataFrame &currFrame)
