@@ -159,5 +159,82 @@ void computeTTCLidar(std::vector<LidarPoint> &lidarPointsPrev,
 
 void matchBoundingBoxes(std::vector<cv::DMatch> &matches, std::map<int, int> &bbBestMatches, DataFrame &prevFrame, DataFrame &currFrame)
 {
-    // ...
+    //outer loop over all keypoint matches between current frame and previous frame
+
+    /// using keypoint matches to match bounding boxes
+    //loop over bounding boxes in current frame
+    //look for which keypoint is located inside the bounding box roi from current frame
+    //if you find a bounding box whose roi the keypoint in question, keep track of bounding box ID
+    //loop over bounding boxes in previous frame
+    //check if matching keypoint of said keypoint in prev frame is contained in the bounding box roi of the prev frame
+    //if so keep track of bounding box ID
+    // Enter the BoundingBox_ID in prev frame and BoundingBox_ID in current frame in bbmatches if they're both not -1
+
+
+    // use multimap instead of std::map as std::map only keeps unique keys.
+
+    std::multimap<int, int> bbmatches;                     // prevID:currID;
+
+    for( std::vector<cv::DMatch>::iterator it = matches.begin(); it<matches.end(); it ++){
+
+        int currBoundingBoxID = -1;
+        int prevBoundingBoxID = -1;
+
+        for (auto& currBoundingBox: currFrame.boundingBoxes){
+            auto curr_keypoint_index = it->trainIdx;
+            cv::Point2f currPt = currFrame.keypoints[curr_keypoint_index].pt;
+            cv::Point curr_keypoint_location(cvRound(currPt.x), cvRound(currPt.y));
+            if (currBoundingBox.roi.contains(curr_keypoint_location)){
+                currBoundingBoxID = currBoundingBox.boxID;
+                break;
+             }
+        }
+
+        for (auto& prevBoundingBox: prevFrame.boundingBoxes){
+            auto prev_keypoint_index = it->queryIdx;
+            cv::Point2f prevPt = prevFrame.keypoints[prev_keypoint_index].pt;
+            cv::Point prev_keypoint_location(cvRound(prevPt.x), cvRound(prevPt.y));
+            if (prevBoundingBox.roi.contains(prev_keypoint_location)){
+                prevBoundingBoxID = prevBoundingBox.boxID;
+                break;
+            }
+        }
+
+        if( (prevBoundingBoxID != -1) && (currBoundingBoxID != -1 ) ){
+//            bbmatches[prevBoundingBoxID] = currBoundingBoxID;
+            bbmatches.insert({prevBoundingBoxID, currBoundingBoxID});
+        }
+
+    }
+
+    /// Find the best bounding box matches
+
+    std::map< std::pair<const int,int>, int > paircounts;
+
+    for(auto& BBpair: bbmatches ){
+        paircounts[BBpair]+=1;
+    }
+
+    // now find out which pair has the highest frequency
+
+    for (auto & prevBoundingBox: prevFrame.boundingBoxes){
+
+        int max_freq{0};
+        int curr_ID = -1;
+
+        for (auto& pair: paircounts ){
+            if(prevBoundingBox.boxID == pair.first.first){
+                if (max_freq < pair.second){
+                    max_freq = pair.second;
+                    curr_ID = pair.first.second;
+                }
+            }
+        }
+
+        if(curr_ID !=-1){
+            bbBestMatches[prevBoundingBox.boxID] = curr_ID;
+        }
+
+    }
+
 }
