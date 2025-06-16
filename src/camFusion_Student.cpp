@@ -139,12 +139,52 @@ void show3DObjects(std::vector<BoundingBox> &boundingBoxes, cv::Size worldSize, 
 // associate a given bounding box with the keypoints it contains
 void clusterKptMatchesWithROI(BoundingBox &boundingBox, std::vector<cv::KeyPoint> &kptsPrev, std::vector<cv::KeyPoint> &kptsCurr, std::vector<cv::DMatch> &kptMatches)
 {
-    std::vector<std::vector<cv::DMatch>> kptMatchesVec;
-    std::vectror<<cv::KeyPoint>> kptsPrevVec;
+    std::vector<cv::DMatch> kptMatchesVec;
+    std::vector<cv::Point2f > AccumVec;
     for (auto& kpmatch: kptMatches ){
         auto curr_keypoint_index = kpmatch.trainIdx;
-        if(auto)
+        cv::Point2f curr_pt_f = kptsCurr[curr_keypoint_index].pt;
+        cv::Point curr_pt = (cv::Point)curr_pt_f;
+
+        // store keypoint matches in the kptMatchesVec vector
+        if(boundingBox.roi.contains(curr_pt)){
+            kptMatchesVec.push_back(kpmatch);
+            AccumVec.push_back(curr_pt_f);
+        }
+
     }
+    //compute mean position to remove outliers matches in the bounding box
+    cv::Point2f zero(0.0f, 0.0f);
+    cv::Point2f sum  = std::accumulate(AccumVec.begin(), AccumVec.end(), zero);
+    cv::Point2f mean_point(sum.x / AccumVec.size(), sum.y / AccumVec.size());
+
+    // calculate variance which will be used as the threshold for deciding which points to keep and which ones are outliers
+    //compute standard deviation of distances from mean
+    double variance{0};
+    std::vector<double> distances;
+    for(auto& point: AccumVec){
+        distances.push_back(cv::norm(point-mean_point));
+    }
+
+    double mean_dist = std::accumulate(distances.begin(), distances.end(), 0.0) / distances.size();
+
+    for (const auto &d : distances)
+        variance += (d - mean_dist) * (d - mean_dist);
+    double stddev = std::sqrt(variance / distances.size());
+
+    double threshold = mean_dist + 1.5 * stddev; // or adjust 1.5 to be more/less strict
+
+    // Keep inliers close to the mean, within the calculated thereshhold
+    for(auto& kpmatch: kptMatchesVec){
+
+        cv::Point2f curr_pt_f = kptsCurr[kpmatch.trainIdx].pt;
+        if(cv::norm(curr_pt_f - mean_point)<threshold){
+            boundingBox.kptMatches.push_back(kpmatch);
+            boundingBox.keypoints.push_back(kptsCurr[kpmatch.trainIdx]);
+        }
+
+    }
+
 }
 
 
