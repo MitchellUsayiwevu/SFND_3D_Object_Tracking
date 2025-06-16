@@ -192,7 +192,57 @@ void clusterKptMatchesWithROI(BoundingBox &boundingBox, std::vector<cv::KeyPoint
 void computeTTCCamera(std::vector<cv::KeyPoint> &kptsPrev, std::vector<cv::KeyPoint> &kptsCurr, 
                       std::vector<cv::DMatch> kptMatches, double frameRate, double &TTC, cv::Mat *visImg)
 {
-    // ...
+    std::vector<double> distance_ratios;
+
+    for (std::vector<cv::DMatch>::iterator it=kptMatches.begin(); it<kptMatches.end(); it++){
+
+        cv::Point2f FirstCurr = kptsCurr[it->trainIdx].pt;
+        cv::Point2f FirstPrev = kptsPrev[it->queryIdx].pt;
+
+        for(std::vector<cv::DMatch>::iterator it2 = kptMatches.begin()+1; it2 < kptMatches.end(); it2++){
+
+            cv::Point2f SecondCurr = kptsCurr[it2->trainIdx].pt;
+            cv::Point2f SecondPrev = kptsPrev[it2->queryIdx].pt;
+
+            double distCurr = cv::norm(FirstCurr - SecondCurr);
+            double distPrev = cv::norm(FirstPrev - SecondPrev);
+
+            double minDist = 100.0;  // Threshold
+
+            // Avoid division by zero and apply the threshold
+            if (distPrev > std::numeric_limits<double>::epsilon() && distCurr >= minDist) {
+                double distRatio = distCurr / distPrev;
+                distance_ratios.push_back(distRatio);
+            }
+        }
+    }
+
+    if(distance_ratios.empty()){
+        //TTC = NAN;
+        TTC = std::numeric_limits<double>::quiet_NaN();
+        return ;
+    }
+
+    //std::sort(distance_ratios.begin(), distance_ratios.end(), [](const double &a, const double &b) {
+      //  return a < b;  // ascending x values
+    //});
+
+
+    std::sort(distance_ratios.begin(), distance_ratios.end());
+
+    double medianDistRatio;      // use median values which are more robust to outliers
+
+    if(distance_ratios.size()%2 == 0){
+        medianDistRatio = ( distance_ratios[distance_ratios.size()/2] + distance_ratios[(distance_ratios.size()/2) -1 ])/2 ;
+        //average of the 2 middle numbers if the vector has an even size
+    }else{
+        medianDistRatio = distance_ratios[distance_ratios.size()/2];
+        //middle number if the vector has an odd size
+    }
+
+    // TTC estimate based on the calculated distance ratios
+    TTC = (-1.0 / frameRate) / (1 - medianDistRatio);
+
 }
 
 
