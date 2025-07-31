@@ -120,27 +120,74 @@ TTC Lidar \
 ## FP.6 Performance Evaluation 2
 TTC Camera values in seconds.
 
-| #  | FAST keypoints + BRIEF descriptor| FAST keypoints + BRISK descriptor | FAST keypoints + ORB descriptor  | SHITOMASI keypoints + ORB descriptor | BRISK keypoints + BRISK descriptor  |
-|----|---------------|-------------------------|----------------------------------|----------------------------|-------------------------------------|
-| 1  | 12.1074       | 11.92067                | 14.72273                         | 13.6954                    | 12.82814                            |                             
-| 2  | 12.697676     | -inf                    | 23.04485                         | 12.768024                  | 28.98185                            |                             
-| 3  | 13.359617     | 13.04631                | 12.9553                          | 11.26671                   | 14.639475                           |                             
-| 4  | 12.670212     | 11.27993                | 14.074687                        | 12.72818                   | 18.0262                             |                             
-| 5  | 331.161104    | 39.113704               | -inf                             | 13.080885                  | 37.63555                            |                             
-| 6  | 14.3649       | 13.306518               | 13.33863                         | 13.753321                  | 15.15632                            |                             
-| 7  | 14.1642       | 13.0325                 | 13.5996                          | 11.749351                  | 17.81773                            |                             
-| 8  | 11.54672      | 11.813868               | 12.053083                        | 13.025623                  | 16.099                              |                             
-| 9  | 12.5357       | 11.90083                | 11.723607                        | 12.25264                   | 12.8582                             |                             
-| 10 | 12.252967     | 13.360675               | 13.5653                          | 13.055343                  | 13.33675                            |                             
-| 11 | 13.895767     | 12.53584                | 13.5996                          | 10.95845                   | 12.5974                             |                             
-| 12 | 11.178178     | 12.254113               | 13.33426                         | 12.0043                    | 12.0911                             |                             
-| 13 | 11.390586     | 12.06402                | 11.589684                        | 12.63392                   | 12.0827                             |                             
-| 14 | 11.1344       | 12.32915                | 11.607725                        | 12.50973                   | 12.8117                             |                             
-| 15 | 11.52954      | 11.0367                 | 12.403989                        | 10.43026                   | 16.298592                           |                             
-| 16 | 12.11133      | 12.150221               | 12.13756                         | 12.876473                  | 11.27715                            |                             
-| 17 | 7.45371       | 10.231                  | 10.76764                         | 11.00735                   | 10.53112                            |                             
-| 18 | 11.698638     | 12.6654                 | 11.20737                         | 7.75039                    | 13.19067                            |                             
+[//]: # ()
+[//]: # (| #  | FAST keypoints + BRIEF descriptor| FAST keypoints + BRISK descriptor | FAST keypoints + ORB descriptor  | SHITOMASI keypoints + ORB descriptor | BRISK keypoints + BRISK descriptor  |)
 
-* Using Fast Keypoints,TTC calculation fails on frames 2 and 5 (for BRIEF,BRISK and ORB descriptor). It's either a very large number, or  -inf in some cases.
-* When I switch to Shitomasi Keypoints + ORB descriptor they actually do really well. No TTC camera value is overly large or inf.
-* With BRISK Keypoints +  BRISK descriptor, values are fluctuating a lot and getting in the range of 30s. TTC values are in a range higher than the other keypoint descripter combinations considered.
+[//]: # (|----|---------------|-------------------------|----------------------------------|----------------------------|-------------------------------------|)
+
+[//]: # (| 1  | 12.1074       | 11.92067                | 14.72273                         | 13.6954                    | 12.82814                            |                             )
+
+[//]: # (| 2  | 12.697676     | -inf                    | 23.04485                         | 12.768024                  | 28.98185                            |                             )
+
+[//]: # (| 3  | 13.359617     | 13.04631                | 12.9553                          | 11.26671                   | 14.639475                           |                             )
+
+[//]: # (| 4  | 12.670212     | 11.27993                | 14.074687                        | 12.72818                   | 18.0262                             |                             )
+
+[//]: # (| 5  | 331.161104    | 39.113704               | -inf                             | 13.080885                  | 37.63555                            |                             )
+
+[//]: # (| 6  | 14.3649       | 13.306518               | 13.33863                         | 13.753321                  | 15.15632                            |                             )
+
+[//]: # (| 7  | 14.1642       | 13.0325                 | 13.5996                          | 11.749351                  | 17.81773                            |                             )
+
+[//]: # (| 8  | 11.54672      | 11.813868               | 12.053083                        | 13.025623                  | 16.099                              |                             )
+
+[//]: # (| 9  | 12.5357       | 11.90083                | 11.723607                        | 12.25264                   | 12.8582                             |                             )
+
+[//]: # (| 10 | 12.252967     | 13.360675               | 13.5653                          | 13.055343                  | 13.33675                            |                             )
+
+[//]: # (| 11 | 13.895767     | 12.53584                | 13.5996                          | 10.95845                   | 12.5974                             |                             )
+
+[//]: # (| 12 | 11.178178     | 12.254113               | 13.33426                         | 12.0043                    | 12.0911                             |                             )
+
+[//]: # (| 13 | 11.390586     | 12.06402                | 11.589684                        | 12.63392                   | 12.0827                             |                             )
+
+[//]: # (| 14 | 11.1344       | 12.32915                | 11.607725                        | 12.50973                   | 12.8117                             |                             )
+
+[//]: # (| 15 | 11.52954      | 11.0367                 | 12.403989                        | 10.43026                   | 16.298592                           |                             )
+
+[//]: # (| 16 | 12.11133      | 12.150221               | 12.13756                         | 12.876473                  | 11.27715                            |                             )
+
+[//]: # (| 17 | 7.45371       | 10.231                  | 10.76764                         | 11.00735                   | 10.53112                            |                             )
+
+[//]: # (| 18 | 11.698638     | 12.6654                 | 11.20737                         | 7.75039                    | 13.19067                            |                             )
+
+[//]: # ()
+[//]: # (* Using Fast Keypoints,TTC calculation fails on frames 2 and 5 &#40;for BRIEF,BRISK and ORB descriptor&#41;. It's either a very large number, or  -inf in some cases.)
+
+[//]: # (* When I switch to Shitomasi Keypoints + ORB descriptor they actually do really well. No TTC camera value is overly large or inf.)
+
+[//]: # (* With BRISK Keypoints +  BRISK descriptor, values are fluctuating a lot and getting in the range of 30s. TTC values are in a range higher than the other keypoint descripter combinations considered.)
+
+* Using command-line arguments to dynamically adjust how the program runs each time
+* The values are recorded in the spreadsheet attached "images/ TTC_Keypoint_Descriptor_Combinations.xlsx"
+
+<img src="images/Command_Line_Values.png" />
+
+* From the spreadsheet and plot (based on averages):
+
+* SHITOMASI + ORB
+  * Consistent across all frames 
+  * Average TTC ~12–13s 
+  * No -inf or extreme outliers
+
+* FAST + BRIEF / FAST + BRISK / FAST + ORB
+  * Often give -inf or huge TTCs (especially frame 2 and 5)
+  * High variance
+  * Not robust
+
+* BRISK + BRISK
+  * Some realistic values 
+  * But average is high (~30s), and lots of fluctuation 
+  * Less reliable
+
+<img src="images/average_ttc_plot.png" />
