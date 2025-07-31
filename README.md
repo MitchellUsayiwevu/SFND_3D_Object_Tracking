@@ -49,11 +49,11 @@ Matches must be the ones with the highest number of keypoint correspondences.
   * Loop over bounding boxes in previous frame, check if matching keypoint of said keypoint in prev frame is contained in the bounding box roi of the prev frame
   * if so keep track of bounding box ID
   * Enter the BoundingBox_ID in prev frame and BoundingBox_ID in current frame in bbmatches if they're both not -1
-  * After obtaining bounding box matches, find the best bounding box matches by determining find out which pair has the highest frequency.
+  * After obtaining bounding box matches, find the best bounding box matches by determining which pair has the highest frequency.
 
 
 ## FP.2 Compute Lidar-based TTC
-* Compute the time-to-collision in second for all matched 3D objects using only Lidar measurements from the matched bounding boxes between current and previous frame.
+* Compute the time-to-collision in seconds for all matched 3D objects using only Lidar measurements from the matched bounding boxes between current and previous frame.
 * Code found in camFusion_Student.cpp lines 249 to 301
 * Pseudocode used is below: 
   * Filter points to use only those within one lane width for lidar points in both current and prev frame
@@ -120,56 +120,59 @@ TTC Lidar \
 ## FP.6 Performance Evaluation 2
 TTC Camera values in seconds.
 
-[//]: # ()
-[//]: # (| #  | FAST keypoints + BRIEF descriptor| FAST keypoints + BRISK descriptor | FAST keypoints + ORB descriptor  | SHITOMASI keypoints + ORB descriptor | BRISK keypoints + BRISK descriptor  |)
 
-[//]: # (|----|---------------|-------------------------|----------------------------------|----------------------------|-------------------------------------|)
+| #  | FAST keypoints + BRIEF descriptor| FAST keypoints + BRISK descriptor | FAST keypoints + ORB descriptor  | SHITOMASI keypoints + ORB descriptor | BRISK keypoints + BRISK descriptor  |
 
-[//]: # (| 1  | 12.1074       | 11.92067                | 14.72273                         | 13.6954                    | 12.82814                            |                             )
+|----|---------------|-------------------------|----------------------------------|----------------------------|-------------------------------------|
 
-[//]: # (| 2  | 12.697676     | -inf                    | 23.04485                         | 12.768024                  | 28.98185                            |                             )
+| 1  | 12.1074       | 11.92067                | 14.72273                         | 13.6954                    | 12.82814                            |                             
 
-[//]: # (| 3  | 13.359617     | 13.04631                | 12.9553                          | 11.26671                   | 14.639475                           |                             )
+| 2  | 12.697676     | -inf                    | 23.04485                         | 12.768024                  | 28.98185                            |                             
 
-[//]: # (| 4  | 12.670212     | 11.27993                | 14.074687                        | 12.72818                   | 18.0262                             |                             )
+| 3  | 13.359617     | 13.04631                | 12.9553                          | 11.26671                   | 14.639475                           |                             
 
-[//]: # (| 5  | 331.161104    | 39.113704               | -inf                             | 13.080885                  | 37.63555                            |                             )
+| 4  | 12.670212     | 11.27993                | 14.074687                        | 12.72818                   | 18.0262                             |                             
 
-[//]: # (| 6  | 14.3649       | 13.306518               | 13.33863                         | 13.753321                  | 15.15632                            |                             )
+| 5  | 331.161104    | 39.113704               | -inf                             | 13.080885                  | 37.63555                            |                             
 
-[//]: # (| 7  | 14.1642       | 13.0325                 | 13.5996                          | 11.749351                  | 17.81773                            |                             )
+| 6  | 14.3649       | 13.306518               | 13.33863                         | 13.753321                  | 15.15632                            |                             
 
-[//]: # (| 8  | 11.54672      | 11.813868               | 12.053083                        | 13.025623                  | 16.099                              |                             )
+| 7  | 14.1642       | 13.0325                 | 13.5996                          | 11.749351                  | 17.81773                            |                             
 
-[//]: # (| 9  | 12.5357       | 11.90083                | 11.723607                        | 12.25264                   | 12.8582                             |                             )
+| 8  | 11.54672      | 11.813868               | 12.053083                        | 13.025623                  | 16.099                              |                             
 
-[//]: # (| 10 | 12.252967     | 13.360675               | 13.5653                          | 13.055343                  | 13.33675                            |                             )
+| 9  | 12.5357       | 11.90083                | 11.723607                        | 12.25264                   | 12.8582                             |                             
 
-[//]: # (| 11 | 13.895767     | 12.53584                | 13.5996                          | 10.95845                   | 12.5974                             |                             )
+| 10 | 12.252967     | 13.360675               | 13.5653                          | 13.055343                  | 13.33675                            |                             
 
-[//]: # (| 12 | 11.178178     | 12.254113               | 13.33426                         | 12.0043                    | 12.0911                             |                             )
+| 11 | 13.895767     | 12.53584                | 13.5996                          | 10.95845                   | 12.5974                             |                             
 
-[//]: # (| 13 | 11.390586     | 12.06402                | 11.589684                        | 12.63392                   | 12.0827                             |                             )
+| 12 | 11.178178     | 12.254113               | 13.33426                         | 12.0043                    | 12.0911                             |                             
 
-[//]: # (| 14 | 11.1344       | 12.32915                | 11.607725                        | 12.50973                   | 12.8117                             |                             )
+| 13 | 11.390586     | 12.06402                | 11.589684                        | 12.63392                   | 12.0827                             |                             
 
-[//]: # (| 15 | 11.52954      | 11.0367                 | 12.403989                        | 10.43026                   | 16.298592                           |                             )
+| 14 | 11.1344       | 12.32915                | 11.607725                        | 12.50973                   | 12.8117                             |                             
 
-[//]: # (| 16 | 12.11133      | 12.150221               | 12.13756                         | 12.876473                  | 11.27715                            |                             )
+| 15 | 11.52954      | 11.0367                 | 12.403989                        | 10.43026                   | 16.298592                           |                             
 
-[//]: # (| 17 | 7.45371       | 10.231                  | 10.76764                         | 11.00735                   | 10.53112                            |                             )
+| 16 | 12.11133      | 12.150221               | 12.13756                         | 12.876473                  | 11.27715                            |                             
 
-[//]: # (| 18 | 11.698638     | 12.6654                 | 11.20737                         | 7.75039                    | 13.19067                            |                             )
+| 17 | 7.45371       | 10.231                  | 10.76764                         | 11.00735                   | 10.53112                            |                             
 
-[//]: # ()
-[//]: # (* Using Fast Keypoints,TTC calculation fails on frames 2 and 5 &#40;for BRIEF,BRISK and ORB descriptor&#41;. It's either a very large number, or  -inf in some cases.)
+| 18 | 11.698638     | 12.6654                 | 11.20737                         | 7.75039                    | 13.19067                            |                             
 
-[//]: # (* When I switch to Shitomasi Keypoints + ORB descriptor they actually do really well. No TTC camera value is overly large or inf.)
 
-[//]: # (* With BRISK Keypoints +  BRISK descriptor, values are fluctuating a lot and getting in the range of 30s. TTC values are in a range higher than the other keypoint descripter combinations considered.)
+* Using Fast Keypoints,TTC calculation fails on frames 2 and 5 (for BRIEF,BRISK and ORB descriptor). It's either a very large number, or  -inf in some cases.
 
-* Using command-line arguments to dynamically adjust how the program runs each time
-* The TTC values for all 36 detector / descriptor combinations implemented in 2D_Tracking project are recorded in the spreadsheet attached "images/ TTC_Keypoint_Descriptor_Combinations.xlsx"
+* When I switch to Shitomasi Keypoints + ORB descriptor they actually do really well. No TTC camera value is overly large or inf.
+
+* With BRISK Keypoints +  BRISK descriptor, values are fluctuating a lot and getting in the range of 30s. TTC values are in a range higher than the other keypoint descripter combinations considered.
+
+
+* Update using Project Feedback
+
+  * Using command-line arguments to dynamically adjust how the program runs each time
+  * The TTC values for all 36 detector / descriptor combinations implemented in 2D_Tracking project are recorded in the spreadsheet attached "images/ TTC_Keypoint_Descriptor_Combinations.xlsx"
 
 <img src="images/Command_Line_Values.png" />
 
