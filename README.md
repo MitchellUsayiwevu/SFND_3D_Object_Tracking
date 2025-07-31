@@ -40,7 +40,7 @@ In this final project, you will implement the missing parts in the schematic. To
 * Implement the method "matchBoundingBoxes", which takes as input both the previous and the current data frames and provides as output the ids of the matched regions of interest (i.e. the boxID property). 
 Matches must be the ones with the highest number of keypoint correspondences.
 * NB use multimap instead of std::map as std::map only keeps unique keys.
-* Code found in camFusion_Student.hpp lines 305 to 386
+* Code found in camFusion_Student.cpp lines 305 to 386
 * Pseudocode used is below: 
   * Have an outer loop over all keypoint matches between current frame and previous frame
   * Using keypoint matches to match bounding boxes, loop over bounding boxes in current frame 
@@ -54,7 +54,7 @@ Matches must be the ones with the highest number of keypoint correspondences.
 
 ## FP.2 Compute Lidar-based TTC
 * Compute the time-to-collision in second for all matched 3D objects using only Lidar measurements from the matched bounding boxes between current and previous frame.
-* Code found in camFusion_Student.hpp lines 249 to 301
+* Code found in camFusion_Student.cpp lines 249 to 301
 * Pseudocode used is below: 
   * Filter points to use only those within one lane width for lidar points in both current and prev frame
   * Sort the points in order of increasing x values
@@ -63,7 +63,7 @@ Matches must be the ones with the highest number of keypoint correspondences.
 
 ## FP.3 Associate Keypoint Correspondences with Bounding Boxes
 * Associate a given bounding box with the keypoints it contains
-* Code found in camFusion_Student.hpp lines 140 to 188
+* Code found in camFusion_Student.cpp lines 140 to 188
 * Pseudocode used is below: 
   * Iterate over all keypoint matches and keep those whose current keypoint lies inside the bounding box. 
   * Store the positions of these valid keypoints. 
@@ -80,7 +80,7 @@ Matches must be the ones with the highest number of keypoint correspondences.
 * We estimate TTC by observing how quickly the image of an object is expanding (i.e., keypoints are moving apart) as the camera gets closer to it.
 * This is called scale change or optical expansion and it encodes how fast the object is approaching relative to its distance.
 * You don’t need the actual depth — just how fast things are getting bigger on the image plane.
-* Code found in camFusion_Student.hpp lines 192 to 246
+* Code found in camFusion_Student.cpp lines 192 to 246
 * Pseudocode used is below:
   * Loop through all pairs of matched keypoints between consecutive frames. 
   * For each pair, compute distances in the previous and current frame. 
