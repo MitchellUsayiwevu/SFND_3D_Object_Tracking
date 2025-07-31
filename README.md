@@ -169,7 +169,7 @@ TTC Camera values in seconds.
 [//]: # (* With BRISK Keypoints +  BRISK descriptor, values are fluctuating a lot and getting in the range of 30s. TTC values are in a range higher than the other keypoint descripter combinations considered.)
 
 * Using command-line arguments to dynamically adjust how the program runs each time
-* The values are recorded in the spreadsheet attached "images/ TTC_Keypoint_Descriptor_Combinations.xlsx"
+* The TTC values for all 36 detector / descriptor combinations implemented in 2D_Tracking project are recorded in the spreadsheet attached "images/ TTC_Keypoint_Descriptor_Combinations.xlsx"
 
 <img src="images/Command_Line_Values.png" />
 
