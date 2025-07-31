@@ -33,7 +33,12 @@ In this final project, you will implement the missing parts in the schematic. To
 1. Clone this repo.
 2. Make a build directory in the top level project directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./3D_object_tracking`.
+[//]: # (4. Run it: `./3D_object_tracking`.)
+4. Run it `./3D_object_tracking FAST BRIEF`      
+    * Where `FAST BRIEF` is the detector/descriptor combination you want to try out
+    * Detector list to choose from {SHITOMASI, HARRIS, FAST, BRISK, ORB, AKAZE, SIFT }
+    * Descriptor list to choose from {BRISK, BRIEF, ORB, FREAK, AKAZE, SIFT}
+
 
 ## FP.1 Match 3D Objects
 
